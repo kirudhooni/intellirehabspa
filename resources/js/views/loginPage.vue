@@ -60,10 +60,8 @@
                 form: {
                     username: '',
                     password: '',
-
                     errors: ''
                 },
-
                 error: null
             };
         },

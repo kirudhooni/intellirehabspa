@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h1>Admin User-List</h1>
-    
+        <successAlert></successAlert>   
         <div class="row">
                 <div class="col-lg-12">
                     <div class="main-box clearfix">
@@ -50,8 +50,12 @@
 
 
 <script>
+import SuccessAlert from './../successAlert.vue';
 export default {
     name: 'list',
+    components: {
+            SuccessAlert,
+            },
     mounted() {
         
         this.$store.dispatch('getUsers');

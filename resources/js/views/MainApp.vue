@@ -12,9 +12,13 @@
 
 <script>
     import Header from './Header.vue';
+    import SuccessAlert from './successAlert.vue';
     export default {
         name: 'main-app',
-        components: {Header},
+        components: {
+            Header,
+            SuccessAlert,
+            },
         data(){
             return{
                 haveUser: false

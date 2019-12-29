@@ -10,7 +10,9 @@ export default {
         isLoggedIn: !!user,
         loading: false,
         auth_error: null,
-        users: []
+        userAdded: false,
+        users: [],
+
 
     },
     getters: {
@@ -32,6 +34,9 @@ export default {
         },
         users(state) {
             return state.users;
+        },
+        userAdded(state){
+            return state.userAdded;
         }
     },
     mutations: {
@@ -61,6 +66,12 @@ export default {
         },
         updateUsers(state, payload){
             state.users = payload;
+        },
+        updateUserAddedTrue(state){
+            state.userAdded = true;
+        },
+        updateUserAddedFalse(state){
+            state.userAdded = false;
         }
     },
     actions: {
