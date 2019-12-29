@@ -40,6 +40,7 @@
 <script>
 
     import {login} from '../helpers/auth';
+    import Event from '../app.js'
     //import store from '../store';
     export default {
         mounted() {
@@ -74,6 +75,7 @@
                 login(this.$data.form)
                     .then((res) => {
                         
+                        Event.$emit('loggedIn');
                         this.$store.commit("loginSuccess", res);
                         this.$router.push({path: './'});
                     })

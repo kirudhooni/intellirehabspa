@@ -14,6 +14,7 @@ import Vue from 'vue';
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
+export default window.Event = new Vue();
 
 
 const store = new Vuex.Store(StoreData);

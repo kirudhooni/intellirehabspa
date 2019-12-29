@@ -1,4 +1,5 @@
 import { getLocalUser } from "./helpers/auth";
+import Axios from "axios";
 
 const user = getLocalUser();
 
@@ -9,6 +10,7 @@ export default {
         isLoggedIn: !!user,
         loading: false,
         auth_error: null,
+        users: []
 
     },
     getters: {
@@ -27,6 +29,9 @@ export default {
         },
         authError(state){
             return state.auth_error;
+        },
+        users(state) {
+            return state.users;
         }
     },
     mutations: {
@@ -53,11 +58,25 @@ export default {
             localStorage.removeItem("user");
             state.isLoggedIn = false;
             state.currentUser = null;
+        },
+        updateUsers(state, payload){
+            state.users = payload;
         }
     },
     actions: {
         login(context){
             context.commit("login");
+        },
+
+        getUsers(context){
+            axios.get('api/users', {
+                headers: {
+                    "Authorization": `Bearer ${context.state.currentUser.token}`
+                }
+            })
+            .then((response) => {
+                context.commit('updateUsers',response.data.users);
+            })  
         }
     }
 
