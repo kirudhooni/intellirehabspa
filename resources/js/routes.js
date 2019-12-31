@@ -4,6 +4,7 @@ import home from './views/home.vue';
 import usersMain from './views/users/usersMain.vue';
 import UserList from './views/users/userList.vue';
 import UserAdd from './views/users/add.vue';
+import UserEdit from './views/users/edit.vue';
 
 export const routes =[
     {
@@ -39,10 +40,10 @@ export const routes =[
                 path: 'add',
                 component: UserAdd
             },
-            // {
-            //     path: '/edit/:id',
-            //     component: userEdit
-            // }
+            {
+                path: 'edit/:id',
+                component: UserEdit
+            }
         ]  
     }
 

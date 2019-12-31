@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h1>Admin User-List</h1>
-        <successAlert></successAlert>   
+        <successAlert alertHeader ="Success!" alertMessage ="New User Added!" getter = "userAdded" commit = "updateUserAddedFalse"></successAlert>   
         <div class="row">
                 <div class="col-lg-12">
                     <div class="main-box clearfix">
@@ -35,7 +35,7 @@
                                             <td>{{ user.updated_at }}</td>
                                             <td>{{ user.status }}</td>
                                             <td>
-                                                <router-link to="'/users/edit/${user.id}">Edit</router-link>
+                                                <router-link :to="`/users/edit/${user.id}`">Edit</router-link>
                                             </td>
                                         </tr>
                                    </template>
