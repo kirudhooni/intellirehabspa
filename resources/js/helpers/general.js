@@ -1,3 +1,4 @@
+
 export function initialize(store, router){
 
 
@@ -15,11 +16,6 @@ router.beforeEach((to, from, next) => {
     }
 }); 
 
-Axios.interceptors.response.use(null, (error) => {
-    if (error.response.status == 401 ) {
-        store.commit('logout');
-        router.push('/login');
-    }
-});
+
 
 }

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="container">
     <form @submit.prevent="submitForm" @keydown="errors.clear($event.target.name)">
      <div class="row border py-4">
         <label class="col-form-label col-md-2" for="first-name">First Name</label>
@@ -41,18 +41,6 @@
             <textarea rows="5" type="textarea"  name="note" id="note" class="form-control col-md-9 " v-model="form.user.note"></textarea>
     </div>
 
-    
-    <div class="row border py-4">
-        <label class="col-form-label col-md-2" for="level" >Level</label>
-        <select name="level" class="form-control col-md-9" v-model="form.user.level" @change="errors.clear('level')">
-                <option value="therapist">Therapist</option>
-                <option value="doctor">Doctor</option>
-                <option value="admin">Admin</option>
-        </select>
-        <span class="help is-danger" v-text="errors.get('level')"></span>
-
-    </div>
-    
     
     <div class="row border py-4">
         <button type="submit" class="btn btn-success col-md-5">Sumbit</button>
@@ -106,7 +94,7 @@
             console.log('edit user mounted')
         },
         created(){
-            axios.get(`/api/users/edit/${this.$route.params.id}`,{
+            axios.get(`/api/personal/edit/${this.$route.params.id}`,{
                 headers: {
                      "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                 }
@@ -117,14 +105,14 @@
         },
         methods:{
                 submitForm(){
-                axios.post(`/api/users/edit/update/${this.$route.params.id}`, this.$data.form.user,{
+                axios.post(`/api/personal/edit/update/${this.$route.params.id}`, this.$data.form.user,{
                     headers: {
                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                     }
                 })
                 .then((response) => {
                     this.$store.commit("updateUserUpdatedTrue");
-                    this.$router.push({path: '/users'});
+                    this.$router.push({path: '/admin'});
                 })
                 .catch((error) => this.errors.record(error.response.data.errors));
                 

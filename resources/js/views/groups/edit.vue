@@ -3,7 +3,7 @@
     <form @submit.prevent="submitForm" @keydown="errors.clear($event.target.name)">
      <div class="row border py-4">
         <label class="col-form-label col-md-2" for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control col-md-9" v-model="form.name">
+        <input type="text" name="name" id="name" class="form-control col-md-9" v-model="form.group.name">
         
         <span class="help is-danger" v-text="errors.get('name')"></span>
 
@@ -11,7 +11,7 @@
 
     <div class="row border py-4">
             <label class="col-form-label col-md-2" for="description">Description</label>
-            <textarea rows="5" type="textarea"  name="description" id="description" class="form-control col-md-9 " v-model="form.description"></textarea>
+            <textarea rows="5" type="textarea"  name="description" id="description" class="form-control col-md-9 " v-model="form.group.description"></textarea>
     </div>
 
     <div class="row border py-4">
@@ -55,8 +55,10 @@
         data(){
             return{
                 form: {
-                    name :'',
-                    description :''
+                    group:{
+                        name :'',
+                        description :''
+                        }
                     
                 },
 
@@ -64,17 +66,27 @@
             }
         },
         mounted(){
-            console.log('add group mounted')
+            console.log('edit group mounted')
+        },
+        created(){
+            axios.get(`/api/groups/edit/${this.$route.params.id}`,{
+                headers: {
+                     "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                }
+            })
+            .then((response) => {
+                this.form.group = response.data.group
+            })
         },
         methods:{
                 submitForm(){
-                axios.post('/api/groups/add', this.$data.form,{
+                axios.post(`/api/groups/edit/update/${this.$route.params.id}`, this.$data.form.group,{
                     headers: {
                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                     }
                 })
                 .then((response) => {
-                    this.$store.commit("updateGroupAddedTrue");
+                    this.$store.commit("updateGroupUpdatedTrue");
                     this.$router.push({path: '/groups'});
                     console.log(response);
                 })

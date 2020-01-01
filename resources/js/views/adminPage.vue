@@ -9,10 +9,10 @@
         </div>
         <div class="form-row  my-4" style="background-color: #BCC2C7; border-radius:10px;">
             <label class="col-md-2 col-form-label" ><h2 class="text-center">Groups</h2></label>
-            <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/user/addGroup">Add</router-link>
-            <a class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" href="#" role="button">View/Edit</a>
-            <a class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" href="#" role="button">Manage</a>
-            <a class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" href="#">Download Groups</a>
+            <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/groups/add">Add</router-link>
+            <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/groups">View/Edit</router-link>
+            <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/groups/manage">Manage</router-link>
+            <button class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" @click="downloadGroups">Download Groups</button>
         </div>
 
         <!-- authauser -->
@@ -20,14 +20,14 @@
                 <label class="col-md-2 col-form-label text-center" ><h2 class="text-center">Users</h2></label>
                 <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/users/add">Add</router-link>
                 <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/users">Edit/View</router-link>
-                <a class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" href="#">Download Users</a>
+                <button class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" @click="downloadUsers">Download Users</button>
             </div>
         
 
         <div class="form-row  my-4" style="background-color: #BCC2C7; border-radius:10px;">
                 <label class="col-md-2 col-form-label" ><h2 class="text-center">Personal</h2></label>
-        <a class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" href="#" role="button">Edit Personal Details</a>
-                <a class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" href="#" role="button">Change Password</a>
+        <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" :to="`/personal/edit/${this.$store.state.currentUser.id}`">Edit Personal Details</router-link>
+                <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" :to="`/personal/edit/changepassword/${this.$store.state.currentUser.id}`">Change Password</router-link>
             </div>
     </div>
 </template>
@@ -36,7 +36,44 @@
     export default {
         name: 'admin',
         computed: {
-            
-        }
+        
+        },
+        methods: 
+        {
+             downloadUsers(){
+             axios.get('/api/users/downloadUsers', {
+                 headers: {
+                     "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                 },
+                 responseType: 'blob'
+             })
+             .then((response) => {
+                 var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                 var fileLink = document.createElement('a');
+                 fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'UsersList.csv');
+                    document.body.appendChild(fileLink);
+                    fileLink.click();
+             })
+         },
+         downloadGroups(){
+             axios.get('/api/groups/downloadGroups', {
+                 headers: {
+                     "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                 },
+                 responseType: 'blob'
+             })
+             .then((response) => {
+                 var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                 var fileLink = document.createElement('a');
+                 fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'GroupsList.csv');
+                    document.body.appendChild(fileLink);
+                    fileLink.click();
+             })
+         }   
+        },
+                
+        
     }
 </script>

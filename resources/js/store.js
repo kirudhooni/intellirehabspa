@@ -1,5 +1,5 @@
 import { getLocalUser } from "./helpers/auth";
-import Axios from "axios";
+import axios from "axios";
 
 const user = getLocalUser();
 
@@ -11,7 +11,11 @@ export default {
         loading: false,
         auth_error: null,
         userAdded: false,
+        userUpdated: false,
         users: [],
+        groupAdded: false,
+        groupUpdated: false,
+        groups: []
 
 
     },
@@ -37,7 +41,19 @@ export default {
         },
         userAdded(state){
             return state.userAdded;
-        }
+        },
+        userUpdated(state){
+            return state.userUpdated;
+        },
+        groups(state){
+            return state.groups;
+        },
+        groupAdded(state){
+            return state.groupAdded;
+        },
+        groupUpdated(state){
+            return state.groupUpdated;
+        },
     },
     mutations: {
         login(state){
@@ -72,7 +88,28 @@ export default {
         },
         updateUserAddedFalse(state){
             state.userAdded = false;
-        }
+        },
+        updateUserUpdatedTrue(state){
+            state.userUpdated = true;
+        },
+        updateUserUpdatedFalse(state){
+            state.userUpdated = false;
+        },
+        updateGroups(state,payload){
+            state.groups = payload;
+        },
+        updateGroupAddedTrue(state){
+            state.groupAdded = true;
+        },
+        updateGroupAddedFalse(state){
+            state.groupAdded = false;
+        },
+        updateGroupUpdatedTrue(state){
+            state.groupUpdated = true;
+        },
+        updateGroupUpdatedFalse(state){
+            state.groupUpdated = false;
+        },
     },
     actions: {
         login(context){
@@ -87,6 +124,17 @@ export default {
             })
             .then((response) => {
                 context.commit('updateUsers',response.data.users);
+            })  
+        },
+
+        getGroups(context){
+            axios.get('http://localhost:8000/api/groups', {
+                headers: {
+                    "Authorization": `Bearer ${context.state.currentUser.token}`
+                }
+            })
+            .then((response) => {
+                context.commit('updateGroups',response.data.groups);
             })  
         }
     }

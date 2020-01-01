@@ -1,19 +1,28 @@
 <template>
-<div>
+<div class="container">
     <form @submit.prevent="submitForm" @keydown="errors.clear($event.target.name)">
      <div class="row border py-4">
-        <label class="col-form-label col-md-2" for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control col-md-9" v-model="form.name">
+        <label class="col-form-label col-md-2" for="oldPassword">Old Password</label>
+        <input type="password"  name="oldPassword" id="oldPassword" class="form-control col-md-9" v-model="form.oldPassword">
         
-        <span class="help is-danger" v-text="errors.get('name')"></span>
+        <span class="help is-danger" v-text="errors.get('oldPassword')"></span>
 
     </div>
 
     <div class="row border py-4">
-            <label class="col-form-label col-md-2" for="description">Description</label>
-            <textarea rows="5" type="textarea"  name="description" id="description" class="form-control col-md-9 " v-model="form.description"></textarea>
+        <label class="col-form-label col-md-2" for="newPassword">New Password</label>
+        <input type="password" value="" name="newPassword" id="newPassword" class="form-control col-md-9" v-model="form.newPassword">
+
+        <span class="help is-danger" v-text="errors.get('newPassword')"></span>
     </div>
 
+    <div class="row border py-4">
+        <label class="col-form-label col-md-2" for="confirmPassword">Confirm Password</label>
+        <input type="password" value="" name="confirmPassword" id="confirmPassword" class="form-control col-md-9" v-model="form.confirmPassword">
+
+        <span class="help is-danger" v-text="errors.get('confirmPassword')"></span>
+    </div>
+    
     <div class="row border py-4">
         <button type="submit" class="btn btn-success col-md-5">Sumbit</button>
         <div class="col-md-2"></div>
@@ -48,35 +57,38 @@
     }
 
     export default {
-        name: 'add',
+        name: 'changePassword',
         computed: {
             
         },
         data(){
             return{
                 form: {
-                    name :'',
-                    description :''
-                    
+                    oldPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
                 },
+                
 
                 errors: new Errors()
             }
         },
         mounted(){
-            console.log('add group mounted')
+            console.log('changePassword mounted')
+        },
+        created(){
+            
         },
         methods:{
                 submitForm(){
-                axios.post('/api/groups/add', this.$data.form,{
+                axios.post(`/api/personal/edit/changepassword/${this.$route.params.id}`, this.$data.form,{
                     headers: {
                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                     }
                 })
                 .then((response) => {
-                    this.$store.commit("updateGroupAddedTrue");
-                    this.$router.push({path: '/groups'});
-                    console.log(response);
+                    this.$store.commit("updateUserUpdatedTrue");
+                    this.$router.push({path: '/admin'});
                 })
                 .catch((error) => this.errors.record(error.response.data.errors));
                 

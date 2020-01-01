@@ -33,9 +33,31 @@ Route::group([
 
 ], function ($router) {
 
+    //users
     Route::get('users','UserController@index');
     Route::get('users/edit/{id}','UserController@edit');
     Route::post('users/add','UserController@create');
+    Route::post('users/edit/update/{id}','UserController@update');
+    Route::get('users/downloadUsers','UserController@downloadusers');
+    Route::get('users/deactivate/{id}','UserController@deactivate');
+    Route::get('users/getUsersInGroup/{id}','UserController@getUsersInGroup');
+    Route::get('users/getUsersNotInGroup/{id}','UserController@getUsersNotInGroup');
+
+    //groups
+    Route::get('groups','GroupController@index');
+    Route::get('groups/edit/{id}','GroupController@edit');
+    Route::post('groups/add','GroupController@create');
+    Route::post('groups/edit/update/{id}','GroupController@update');
+    Route::post('groups/manage','GroupController@manage');
+    Route::get('groups/downloadGroups','GroupController@downloadgroups');
+    Route::get('groups/deactivate/{id}','GroupController@deactivate');
+    Route::post('groups/addUsers/{id}','GroupController@addUsers');
+
+    //personal
+    Route::get('personal/edit/{id}','PersonalController@edit');
+    Route::post('personal/edit/update/{id}','PersonalController@update');
+    Route::post('personal/edit/changepassword/{id}', 'PersonalController@changePassword');
+
 
 });
 

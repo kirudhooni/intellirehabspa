@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <h1>Admin User-List</h1>
-        <successAlert alertHeader ="Success!" alertMessage ="New User Added!" getter = "userAdded" commit = "updateUserAddedFalse"></successAlert> 
-        <successAlert alertHeader ="Success!" alertMessage ="User Updated!" getter = "userUpdated" commit = "updateUserUpdatedFalse"></successAlert>   
+        <h1>Admin Group-List</h1>
+        <successAlert alertHeader ="Success!" alertMessage ="New Group Added!" getter = "groupAdded" commit = "updateGroupAddedFalse"></successAlert> 
+        <successAlert alertHeader ="Success!" alertMessage ="Group Updated!" getter = "groupUpdated" commit = "updateGroupUpdatedFalse"></successAlert>   
         <div class="row">
                 <div class="col-lg-12">
                     <div class="main-box clearfix">
@@ -10,10 +10,8 @@
                             <table class="table table-striped table-bordered">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th><span>Firstname</span></th>
-                                        <th><span>Lastname</span></th>
-                                        <th><span>Username</span></th>
-                                        <th><span>Authentication Level</span></th>
+                                        <th><span>Name</span></th>
+                                        <th><span>Description</span></th>
                                         <th><span>Last Update</span></th>
                                         <th ><span>Status</span></th>
                                         <th ><span>Action</span></th>
@@ -22,24 +20,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   <template v-if="!users.length">   
+                                   <template v-if="!groups.length">   
                                         <tr>
-                                            <td colspan="8" class="text-center">No Users Available</td>
+                                            <td colspan="6" class="text-center">No Groups Available</td>
                                         </tr>
                                    </template>
                                    <template v-else>   
-                                        <tr v-for="(user, key) in users" :key="user.id">
-                                            <td>{{ user.firstname }}</td>
-                                            <td>{{ user.lastname }}</td>
-                                            <td>{{ user.username }}</td>
-                                            <td>{{ user.level }}</td>
-                                            <td>{{ user.updated_at }}</td>
-                                            <td  ref="status">{{ user.status }}</td>
+                                        <tr v-for="(group, key) in groups" :key="group.id">
+                                            <td>{{ group.name }}</td>
+                                            <td>{{ group.description }}</td>
+                                            <td>{{ group.updated_at }}</td>
+                                            <td  ref="status">{{ group.status }}</td>
                                             <td>
-                                                <router-link class="btn btn-outline-secondary" :to="`/users/edit/${user.id}`">Edit</router-link>
+                                                <router-link class="btn btn-outline-secondary" :to="`/groups/edit/${group.id}`">Edit</router-link>
                                             </td>
                                             <td>
-                                                <button ref="deacButton" class="btn btn-outline-secondary" @click="deactivateUser(user.id,key)">{{user.status == 'active' ?'Deactivate':'Activate'}}{{deacButton}}</button>
+                                                <button ref="deacButton" class="btn btn-outline-secondary" @click="deactivateGroup(group.id,key)">{{group.status == 'active' ?'Deactivate':'Activate'}}{{deacButton}}</button>
                                             </td>
                                         </tr>
                                    </template>
@@ -67,24 +63,24 @@ export default {
             },
     mounted() {
         
-        this.$store.dispatch('getUsers');
+        this.$store.dispatch('getGroups');
         
     },
     computed:{
-        users(){
-            return this.$store.getters.users;
+        groups(){
+            return this.$store.getters.groups;
         },
         
     },
     methods:{
-        deactivateUser(user_id,key){
-            axios.get(`/api/users/deactivate/${user_id}`,{
+        deactivateGroup(group_id,key){
+            axios.get(`/api/groups/deactivate/${group_id}`,{
                 headers:{
                     "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                 }
             })
             .then((response) => {
-                this.$refs.status[key].innerHTML = response.data.user_status
+                this.$refs.status[key].innerHTML = response.data.group_status
                 this.$refs.deacButton[key].innerHTML = this.$refs.status[key].textContent == 'active' ?'Deactivate':'Activate'
                 
             });
