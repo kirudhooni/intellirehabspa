@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Admin Group-List</h1>
+        <h2 class="display-4 form-label-mb-5">Group List</h2>
         <successAlert alertHeader ="Success!" alertMessage ="New Group Added!" getter = "groupAdded" commit = "updateGroupAddedFalse"></successAlert> 
         <successAlert alertHeader ="Success!" alertMessage ="Group Updated!" getter = "groupUpdated" commit = "updateGroupUpdatedFalse"></successAlert>   
         <div class="row">

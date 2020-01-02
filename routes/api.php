@@ -53,6 +53,17 @@ Route::group([
     Route::get('groups/deactivate/{id}','GroupController@deactivate');
     Route::post('groups/addUsers/{id}','GroupController@addUsers');
 
+
+    //exercises
+    Route::get('exercises','ExerciseController@index');
+    Route::get('exercises/edit/{id}','ExerciseController@edit');
+    Route::post('exercises/add','ExerciseController@create');
+    Route::post('exercises/edit/update/{id}','ExerciseController@update');
+    Route::get('exercises/downloadExercise','ExerciseController@downloadexercises');
+    Route::get('exercises/deactivate/{id}','ExerciseController@deactivate');
+    Route::get('exercises/getJointsInExercise/{id?}','ExerciseController@getJointsInExercise');
+    Route::get('exercises/getJointsNotInExercise/{id?}','ExerciseController@getJointsNotInExercise');
+
     //personal
     Route::get('personal/edit/{id}','PersonalController@edit');
     Route::post('personal/edit/update/{id}','PersonalController@update');

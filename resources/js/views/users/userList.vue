@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Admin User-List</h1>
+        <h2 class="display-4 form-label-mb-5">User List</h2>
         <successAlert alertHeader ="Success!" alertMessage ="New User Added!" getter = "userAdded" commit = "updateUserAddedFalse"></successAlert> 
         <successAlert alertHeader ="Success!" alertMessage ="User Updated!" getter = "userUpdated" commit = "updateUserUpdatedFalse"></successAlert>   
         <div class="row">

@@ -1,5 +1,6 @@
 <template>
 <div>
+    <h2 class="display-4 form-label-mb-5">Edit Group</h2>
     <form @submit.prevent="submitForm" @keydown="errors.clear($event.target.name)">
      <div class="row border py-4">
         <label class="col-form-label col-md-2" for="name">Name</label>

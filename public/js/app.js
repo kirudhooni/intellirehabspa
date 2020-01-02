@@ -2127,15 +2127,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'dualListBox',
-  props: ['selectedGroup', 'firstTitle', 'secondTitle', 'firstURL', 'secondURL', 'fieldName', 'tableName'],
+  props: ['firstTitle', 'secondTitle', 'list1', 'list2'],
   mounted: function mounted() {
     console.log('DualListBox mounted.');
   },
   data: function data() {
     return {
       newUsers: '',
-      list1: [],
-      list2: [],
+      // list1: [],
+      // list2: [],
       allUsers: []
     };
   },
@@ -2177,36 +2177,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('inGroup', this.list1);
     }
   },
-  created: function created() {
-    var _this = this;
-
-    Event.$on('idSelected', function (id) {
-      _this.allUsers = [];
-      _this.list1 = [];
-      _this.list2 = []; //axios.get(`/api/users/getUsersInGroup/${group}`,{
-
-      axios.get("".concat(_this.firstURL).concat(id), {
-        headers: {
-          "Authorization": "Bearer ".concat(_this.$store.state.currentUser.token)
-        }
-      }).then(function (response) {
-        var fieldName = _this.fieldName;
-
-        for (var i = 0; i < response.data.users.length; i++) {
-          _this.list1.push(response.data.users[i].fieldName);
-        }
-      }); //axios.get(`/api/users/getUsersNotInGroup/${group}`,{
-
-      axios.get("".concat(_this.secondURL).concat(id), {
-        headers: {
-          "Authorization": "Bearer ".concat(_this.$store.state.currentUser.token)
-        }
-      }).then(function (response) {
-        for (var i = 0; i < response.data.users.length; i++) {
-          _this.list2.push(response.data.users[i].username);
-        }
-      });
-    });
+  created: function created() {// this.list1 = this.listOne;
+    // this.list2 = this.listTwo;
   }
 });
 
@@ -2228,6 +2200,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+//
 //
 //
 //
@@ -2306,29 +2279,59 @@ function () {
         masterlist2: '',
         showSuccess: false
       },
+      list1: [],
+      list2: [],
       errors: new Errors()
     };
   },
   mounted: function mounted() {
     console.log('add exercise mounted');
   },
-  methods: {
-    updateMasterList: function updateMasterList(value) {
-      this.masterlist1 = value;
-    },
-    updateMasterList2: function updateMasterList2(value) {
-      this.masterlist2 = value;
-    },
-    submitForm: function submitForm() {
-      var _this = this;
+  created: function created() {
+    var _this = this;
 
-      axios.post("/api/groups/addUsers/".concat(this.selected.id), [this.masterlist1, this.masterlist2], {
+    this.list1 = [];
+    this.list2 = []; //axios.get(`/api/users/getUsersInGroup/${group}`,{
+
+    axios.get("/api/exercises/getJointsInExercise/".concat(this.$route.params.id), {
+      headers: {
+        "Authorization": "Bearer ".concat(this.$store.state.currentUser.token)
+      }
+    }).then(function (response) {
+      for (var i = 0; i < response.data.joints.length; i++) {
+        _this.list1.push(response.data.joints[i].name);
+      }
+    }); //axios.get(`/api/users/getUsersNotInGroup/${group}`,{
+
+    axios.get("/api/exercises/getJointsNotInExercise/".concat(this.$route.params.id), {
+      headers: {
+        "Authorization": "Bearer ".concat(this.$store.state.currentUser.token)
+      }
+    }).then(function (response) {
+      for (var i = 0; i < response.data.joints.length; i++) {
+        _this.list2.push(response.data.joints[i].name);
+      }
+    });
+  },
+  methods: {
+    submitForm: function submitForm() {
+      var _this2 = this;
+
+      axios.post("/api/exercises/add", this.form, {
         headers: {
           "Authorization": "Bearer ".concat(this.$store.state.currentUser.token)
         }
       }).then(function (response) {
-        _this.showSuccess = true;
+        _this2.showSuccess = true;
+      })["catch"](function (error) {
+        return _this2.errors.record(error.response.data.errors);
       });
+    },
+    updateMasterList: function updateMasterList(value) {
+      this.form.masterlist1 = value;
+    },
+    updateMasterList2: function updateMasterList2(value) {
+      this.form.masterlist2 = value;
     }
   }
 });
@@ -2406,6 +2409,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+//
 //
 //
 //
@@ -2519,6 +2523,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+//
 //
 //
 //
@@ -2795,6 +2800,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'manage',
@@ -2803,6 +2809,8 @@ __webpack_require__.r(__webpack_exports__);
       selected: '',
       masterlist1: '',
       masterlist2: '',
+      list1: [],
+      list2: [],
       showSuccess: false
     };
   },
@@ -2824,7 +2832,32 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     passSelectedGroup: function passSelectedGroup() {
-      Event.$emit('idSelected', this.selected.id);
+      var _this = this;
+
+      //Event.$emit('idSelected',this.selected.id);
+      //get data from server
+      this.list1 = [];
+      this.list2 = []; //axios.get(`/api/users/getUsersInGroup/${group}`,{
+
+      axios.get("/api/users/getUsersInGroup/".concat(this.selected.id), {
+        headers: {
+          "Authorization": "Bearer ".concat(this.$store.state.currentUser.token)
+        }
+      }).then(function (response) {
+        for (var i = 0; i < response.data.users.length; i++) {
+          _this.list1.push(response.data.users[i].username);
+        }
+      }); //axios.get(`/api/users/getUsersNotInGroup/${group}`,{
+
+      axios.get("/api/users/getUsersNotInGroup/".concat(this.selected.id), {
+        headers: {
+          "Authorization": "Bearer ".concat(this.$store.state.currentUser.token)
+        }
+      }).then(function (response) {
+        for (var i = 0; i < response.data.users.length; i++) {
+          _this.list2.push(response.data.users[i].username);
+        }
+      });
     },
     updateMasterList: function updateMasterList(value) {
       this.masterlist1 = value;
@@ -2833,14 +2866,14 @@ __webpack_require__.r(__webpack_exports__);
       this.masterlist2 = value;
     },
     submitForm: function submitForm() {
-      var _this = this;
+      var _this2 = this;
 
       axios.post("/api/groups/addUsers/".concat(this.selected.id), [this.masterlist1, this.masterlist2], {
         headers: {
           "Authorization": "Bearer ".concat(this.$store.state.currentUser.token)
         }
       }).then(function (response) {
-        _this.showSuccess = true;
+        _this2.showSuccess = true;
       });
     }
   }
@@ -3379,6 +3412,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
 var Errors =
 /*#__PURE__*/
 function () {
@@ -3468,6 +3502,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+//
 //
 //
 //
@@ -40621,148 +40656,130 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.submitForm($event)
-          },
-          keydown: function($event) {
-            return _vm.errors.clear($event.target.name)
-          }
-        }
-      },
-      [
-        _c("div", { staticClass: "row border py-4" }, [
-          _c(
-            "label",
-            { staticClass: "col-form-label col-md-2", attrs: { for: "name" } },
-            [_vm._v("Name")]
-          ),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.form.name,
-                expression: "form.name"
-              }
-            ],
-            staticClass: "form-control col-md-9",
-            attrs: { type: "text", name: "name", id: "name" },
-            domProps: { value: _vm.form.name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.form, "name", $event.target.value)
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("span", {
-            staticClass: "help is-danger",
-            domProps: { textContent: _vm._s(_vm.errors.get("name")) }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row border py-4" }, [
-          _c(
-            "label",
-            {
-              staticClass: "col-form-label col-md-2",
-              attrs: { for: "description" }
-            },
-            [_vm._v("Description")]
-          ),
-          _vm._v(" "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.form.description,
-                expression: "form.description"
-              }
-            ],
-            staticClass: "form-control col-md-9 ",
-            attrs: {
-              rows: "5",
-              type: "textarea",
-              name: "description",
-              id: "description"
-            },
-            domProps: { value: _vm.form.description },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.form, "description", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("dualListBox", {
-          attrs: { firstTitle: "Assigned Joints", secondTitle: "All Joints" },
-          on: {
-            inGroup: _vm.updateMasterList,
-            notInGroup: _vm.updateMasterList2
-          }
-        }),
-        _vm._v(" "),
-        _c("dualListBox", {
-          attrs: {
-            firstTitle: "Assigned Games",
-            secondTitle: "All Games",
-            selectedGroup: "sss"
-          },
-          on: {
-            inGroup: _vm.updateMasterList,
-            notInGroup: _vm.updateMasterList2
-          }
-        }),
-        _vm._v(" "),
+  return _c(
+    "div",
+    [
+      _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+        _vm._v("Add Exercise")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row border py-4" }, [
         _c(
-          "div",
-          { staticClass: "row  py-4 col-md-12" },
-          [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success col-md-4",
-                on: {
-                  click: function($event) {
-                    return _vm.submitForm()
-                  }
-                }
-              },
-              [_vm._v("Sumbit")]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-2" }),
-            _vm._v(" "),
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-danger  col-md-4",
-                attrs: { role: "button", to: "/admin" }
-              },
-              [_vm._v("Cancel")]
-            )
+          "label",
+          { staticClass: "col-form-label col-md-2", attrs: { for: "name" } },
+          [_vm._v("Name")]
+        ),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.form.name,
+              expression: "form.name"
+            }
           ],
-          1
-        )
-      ],
-      1
-    )
-  ])
+          staticClass: "form-control col-md-9",
+          attrs: { type: "text", name: "name", id: "name" },
+          domProps: { value: _vm.form.name },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.form, "name", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("span", {
+          staticClass: "help is-danger",
+          domProps: { textContent: _vm._s(_vm.errors.get("name")) },
+          on: {
+            keydown: function($event) {
+              return _vm.errors.clear(_vm.errors.name)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row border py-4" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-form-label col-md-2",
+            attrs: { for: "description" }
+          },
+          [_vm._v("Description")]
+        ),
+        _vm._v(" "),
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.form.description,
+              expression: "form.description"
+            }
+          ],
+          staticClass: "form-control col-md-9 ",
+          attrs: {
+            rows: "5",
+            type: "textarea",
+            name: "description",
+            id: "description"
+          },
+          domProps: { value: _vm.form.description },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.form, "description", $event.target.value)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("dualListBox", {
+        attrs: {
+          list1: _vm.list1,
+          list2: _vm.list2,
+          firstTitle: "Assigned Joints",
+          secondTitle: "All Joints"
+        },
+        on: { inGroup: _vm.updateMasterList, notInGroup: _vm.updateMasterList2 }
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row  py-4 col-md-12" },
+        [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-success col-md-4",
+              on: { click: _vm.submitForm }
+            },
+            [_vm._v("Sumbit")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-2" }),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-danger  col-md-4",
+              attrs: { role: "button", to: "/admin" }
+            },
+            [_vm._v("Cancel")]
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -40859,6 +40876,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+      _vm._v("Add Group")
+    ]),
+    _vm._v(" "),
     _c(
       "form",
       {
@@ -40999,6 +41020,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+      _vm._v("Edit Group")
+    ]),
+    _vm._v(" "),
     _c(
       "form",
       {
@@ -41142,7 +41167,9 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
-      _c("h1", [_vm._v("Admin Group-List")]),
+      _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+        _vm._v("Group List")
+      ]),
       _vm._v(" "),
       _c("successAlert", {
         attrs: {
@@ -41327,6 +41354,10 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
+      _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+        _vm._v("Manage Groups")
+      ]),
+      _vm._v(" "),
       _vm.showSuccess
         ? _c(
             "div",
@@ -41397,12 +41428,10 @@ var render = function() {
       _vm._v(" "),
       _c("dualListBox", {
         attrs: {
-          fieldName: "username",
+          list1: _vm.list1,
+          list2: _vm.list2,
           firstTitle: "In Group",
-          secondTitle: "Not In Group",
-          firstURL: "/api/users/getUsersInGroup/",
-          secondURL: "/api/users/getUsersNotInGroup/",
-          selectedGroup: "sss"
+          secondTitle: "Not In Group"
         },
         on: { inGroup: _vm.updateMasterList, notInGroup: _vm.updateMasterList2 }
       }),
@@ -42160,6 +42189,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+      _vm._v("Add User")
+    ]),
+    _vm._v(" "),
     _c(
       "form",
       {
@@ -42514,6 +42547,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+      _vm._v("Edit User")
+    ]),
+    _vm._v(" "),
     _c(
       "form",
       {
@@ -42828,7 +42865,9 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
-      _c("h1", [_vm._v("Admin User-List")]),
+      _c("h2", { staticClass: "display-4 form-label-mb-5" }, [
+        _vm._v("User List")
+      ]),
       _vm._v(" "),
       _c("successAlert", {
         attrs: {

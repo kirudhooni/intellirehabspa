@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <h2 class="display-4 form-label-mb-5">Manage Groups</h2>
         <div v-if="showSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Success!</strong> Group Updated!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -20,7 +21,7 @@
                 </div>
         </div>
 
-        <dualListBox fieldName="username" firstTitle="In Group" secondTitle="Not In Group" firstURL="/api/users/getUsersInGroup/" secondURL="/api/users/getUsersNotInGroup/" selectedGroup="sss" @inGroup="updateMasterList" @notInGroup="updateMasterList2"></dualListBox>
+        <dualListBox :list1 ="list1" :list2="list2" firstTitle="In Group" secondTitle="Not In Group"  @inGroup="updateMasterList" @notInGroup="updateMasterList2"></dualListBox>
 
         
             <div class="row  py-4 col-md-12">
@@ -42,6 +43,8 @@ export default {
             selected: '',
             masterlist1 :'',
             masterlist2 : '',
+            list1: [],
+            list2: [],
             showSuccess: false
         }
     },
@@ -65,7 +68,36 @@ export default {
     methods:{
         
         passSelectedGroup(){
-            Event.$emit('idSelected',this.selected.id);
+            //Event.$emit('idSelected',this.selected.id);
+            //get data from server
+                this.list1 = []
+                this.list2 =[]
+                //axios.get(`/api/users/getUsersInGroup/${group}`,{
+                axios.get(`/api/users/getUsersInGroup/${this.selected.id}`,{
+                    headers: {
+                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                    }
+
+                }).then((response) => {
+                    
+                  for (var i = 0; i < response.data.users.length; i++) {  
+                  this.list1.push(response.data.users[i].username);
+                  
+                  }
+            });
+                //axios.get(`/api/users/getUsersNotInGroup/${group}`,{
+                axios.get(`/api/users/getUsersNotInGroup/${this.selected.id}`,{
+                    headers: {
+                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                         }
+                }).then((response) => {  
+                    
+                  for (var i = 0; i < response.data.users.length; i++) {   
+                  this.list2.push(response.data.users[i].username);
+                  
+                  }
+              });
+            
         },
         updateMasterList(value){
             this.masterlist1 = value;

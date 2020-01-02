@@ -38,9 +38,13 @@ class ExerciseController extends Controller
 
     
     $exercise= Exercise::create($request->only('name','description'));
+    //$exercise = Exercise::find(1);
+    $joints_in= Joint::select('id')->whereIn('name', $request['masterlist1'])->pluck('id');
+
+    $exercise->joints()->sync($joints_in);
 
     return response()->json([
-        "exercise" => $exercise
+        "exercise" => true
     ], 200);
     }
 
@@ -156,5 +160,40 @@ class ExerciseController extends Controller
         return response()->json([
             "attached" =>  true
         ], 200);
+    }
+
+    public function getJointsNotInExercise($id)
+    {   
+        if($id = null){
+            $joints = Joint::whereDoesntHave('exercises')->get();
+        }else{
+            $joints = Joint::whereDoesntHave('exercises',function ($query) use($id){$query->where('id',$id);})->get();
+        }
+        
+        return response()->json([
+            "joints" => $joints
+        ], 200);
+
+        
+
+        
+        
+    }
+
+    public function getJointsInExercise($id)
+    {   
+        if($id = null){
+        $joints = [];
+        }else{
+        $joints = Joint::whereHas('exercises',function ($query) use($id){$query->where('id',$id);})->get();
+        }
+        return response()->json([
+            "joints" => $joints
+        ], 200);
+       
+
+        // return response()->json([
+        //     "users" => $users
+        // ], 200);
     }
 }

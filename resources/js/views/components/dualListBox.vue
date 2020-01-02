@@ -31,11 +31,11 @@
         name: 'dualListBox',
 
         props:[
-            'selectedGroup',
             'firstTitle',
             'secondTitle',
-            'firstURL',
-            'secondURL',
+            'list1',
+            'list2'
+
         ],
         mounted() {
             console.log('DualListBox mounted.')
@@ -45,8 +45,8 @@
             return {
                 
                 newUsers: '',
-                list1: [],
-                list2: [],
+                // list1: [],
+                // list2: [],
                 allUsers: [],
             }
         },
@@ -90,38 +90,8 @@
         },
 
         created(){
-            
-               Event.$on('idSelected',(id)=>{
-
-                this.allUsers=[]
-                this.list1 = []
-                this.list2 =[]
-                //axios.get(`/api/users/getUsersInGroup/${group}`,{
-                axios.get(`${this.firstURL}${id}`,{
-                    headers: {
-                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
-                    }
-
-                }).then((response) => {
-                    
-                  for (var i = 0; i < response.data.users.length; i++) {  
-                  this.list1.push(response.data.users[i].username);
-                  
-                  }
-            });
-                //axios.get(`/api/users/getUsersNotInGroup/${group}`,{
-                axios.get(`${this.secondURL}${id}`,{
-                    headers: {
-                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
-                         }
-                }).then((response) => {  
-                    
-                  for (var i = 0; i < response.data.users.length; i++) {   
-                  this.list2.push(response.data.users[i].username);
-                  
-                  }
-              });
-            });
+            // this.list1 = this.listOne;
+            // this.list2 = this.listTwo;
         },
     }
 </script>
