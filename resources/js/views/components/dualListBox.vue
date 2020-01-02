@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="row" style="padding-top:30px; padding-bottom:10px;">
-            <h3 class="col-md-4 text-center" for="inGroup">In Group</h3>
+            <h3 class="col-md-4 text-center" for="inGroup">{{firstTitle}}</h3>
             <div class="col-md-2"></div>
-            <h3 class="col-md-4 text-center" for="notInGroup">Not In Group</h3>
+            <h3 class="col-md-4 text-center" for="notInGroup">{{secondTitle}}</h3>
         </div>
         <div class="row">
             
@@ -32,6 +32,10 @@
 
         props:[
             'selectedGroup',
+            'firstTitle',
+            'secondTitle',
+            'firstURL',
+            'secondURL',
         ],
         mounted() {
             console.log('DualListBox mounted.')
@@ -87,12 +91,13 @@
 
         created(){
             
-               Event.$on('groupSelected',(group)=>{
+               Event.$on('idSelected',(id)=>{
 
                 this.allUsers=[]
                 this.list1 = []
                 this.list2 =[]
-                axios.get(`/api/users/getUsersInGroup/${group}`,{
+                //axios.get(`/api/users/getUsersInGroup/${group}`,{
+                axios.get(`${this.firstURL}${id}`,{
                     headers: {
                          "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                     }
@@ -104,7 +109,8 @@
                   
                   }
             });
-                axios.get(`/api/users/getUsersNotInGroup/${group}`,{
+                //axios.get(`/api/users/getUsersNotInGroup/${group}`,{
+                axios.get(`${this.secondURL}${id}`,{
                     headers: {
                          "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                          }

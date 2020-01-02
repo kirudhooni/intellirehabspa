@@ -22,6 +22,13 @@
                 <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/users">Edit/View</router-link>
                 <button class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" @click="downloadUsers">Download Users</button>
             </div>
+        <!-- exercises -->
+            <div class="form-row  my-4" style="background-color: #BCC2C7; border-radius:10px;">
+                <label class="col-md-2 col-form-label text-center" ><h2 class="text-center">Exercise</h2></label>
+                <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/exercises/add">Add</router-link>
+                <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/exercises">Edit/View</router-link>
+                <button class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" @click="downloadExercises">Download Exercises</button>
+            </div>
         
 
         <div class="form-row  my-4" style="background-color: #BCC2C7; border-radius:10px;">
@@ -71,7 +78,23 @@
                     document.body.appendChild(fileLink);
                     fileLink.click();
              })
-         }   
+         },
+         downloadExercises(){
+             axios.get('/api/exercises/downloadExercises', {
+                 headers: {
+                     "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                 },
+                 responseType: 'blob'
+             })
+             .then((response) => {
+                 var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                 var fileLink = document.createElement('a');
+                 fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'ExercisesList.csv');
+                    document.body.appendChild(fileLink);
+                    fileLink.click();
+             })
+         }    
         },
                 
         

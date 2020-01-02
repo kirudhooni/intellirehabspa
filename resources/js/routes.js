@@ -15,6 +15,11 @@ import PersonalEdit from './views/personal/edit.vue';
 import PersonalChangePassword from './views/personal/changePassword.vue';
 import GroupManage from './views/groups/manage.vue';
 
+import exercisesMain from './views/exercises/exercisesMain.vue';
+import ExerciseList from './views/exercises/exerciseList.vue'; 
+import ExerciseAdd from './views/exercises/add.vue';
+import ExerciseEdit from './views/exercises/edit.vue';
+
 export const routes =[
     {
         path: '/',
@@ -77,6 +82,27 @@ export const routes =[
             {
                 path: 'manage',
                 component: GroupManage
+            }
+        ]  
+    },
+    {
+        path: '/exercises',
+        component: exercisesMain,
+        meta:{
+            requiresAuth: true
+        },
+        children: [
+            {
+                path: '/',
+                component: ExerciseList
+            },
+            {
+                path: 'add',
+                component: ExerciseAdd
+            },
+            {
+                path: 'edit/:id',
+                component: ExerciseEdit
             }
         ]  
     },

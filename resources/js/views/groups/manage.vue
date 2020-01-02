@@ -20,7 +20,7 @@
                 </div>
         </div>
 
-        <dualListBox selectedGroup="sss" @inGroup="updateMasterList" @notInGroup="updateMasterList2"></dualListBox>
+        <dualListBox fieldName="username" firstTitle="In Group" secondTitle="Not In Group" firstURL="/api/users/getUsersInGroup/" secondURL="/api/users/getUsersNotInGroup/" selectedGroup="sss" @inGroup="updateMasterList" @notInGroup="updateMasterList2"></dualListBox>
 
         
             <div class="row  py-4 col-md-12">
@@ -65,7 +65,7 @@ export default {
     methods:{
         
         passSelectedGroup(){
-            Event.$emit('groupSelected',this.selected.id);
+            Event.$emit('idSelected',this.selected.id);
         },
         updateMasterList(value){
             this.masterlist1 = value;
