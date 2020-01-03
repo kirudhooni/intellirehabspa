@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <h2 class="display-4 form-label-mb-5">Exercise List</h2>
-        <successAlert alertHeader ="Success!" alertMessage ="New exercise Added!" getter = "exerciseAdded" commit = "updateexerciseAddedFalse"></successAlert> 
-        <successAlert alertHeader ="Success!" alertMessage ="exercise Updated!" getter = "exerciseUpdated" commit = "updateexerciseUpdatedFalse"></successAlert>   
+        <h2 class="display-4 form-label-mb-5">Games List</h2>
+        <successAlert alertHeader ="Success!" alertMessage ="New Game Added!" getter = "gameAdded" commit = "updateGameAddedFalse"></successAlert> 
+        <successAlert alertHeader ="Success!" alertMessage ="Game Updated!" getter = "gameUpdated" commit = "updateGameUpdatedFalse"></successAlert>   
         <div class="row">
                 <div class="col-lg-12">
                     <div class="main-box clearfix">
@@ -20,22 +20,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   <template v-if="!exercises.length">   
+                                   <template v-if="!games.length">   
                                         <tr>
-                                            <td colspan="6" class="text-center">No exercises Available</td>
+                                            <td colspan="6" class="text-center">No games Available</td>
                                         </tr>
                                    </template>
                                    <template v-else>   
-                                        <tr v-for="(exercise, key) in exercises" :key="exercise.id">
-                                            <td>{{ exercise.name }}</td>
-                                            <td>{{ exercise.description }}</td>
-                                            <td>{{ exercise.updated_at }}</td>
-                                            <td  ref="status">{{ exercise.status }}</td>
+                                        <tr v-for="(game, key) in games" :key="game.id">
+                                            <td>{{ game.name }}</td>
+                                            <td>{{ game.description }}</td>
+                                            <td>{{ game.updated_at }}</td>
+                                            <td  ref="status">{{ game.status }}</td>
                                             <td>
-                                                <router-link class="btn btn-outline-secondary" :to="`/exercises/edit/${exercise.id}`">Edit</router-link>
+                                                <router-link class="btn btn-outline-secondary" :to="`/games/edit/${game.id}`">Edit</router-link>
                                             </td>
                                             <td>
-                                                <button ref="deacButton" class="btn btn-outline-secondary" @click="deactivateexercise(exercise.id,key)">{{exercise.status == 'active' ?'Deactivate':'Activate'}}{{deacButton}}</button>
+                                                <button ref="deacButton" class="btn btn-outline-secondary" @click="deactivategame(game.id,key)">{{game.status == 'active' ?'Deactivate':'Activate'}}{{deacButton}}</button>
                                             </td>
                                         </tr>
                                    </template>
@@ -56,7 +56,7 @@ export default {
     data(){
         return{
             deacButton: '', 
-            exercises: []
+            games: []
         }
     },
     components: {
@@ -64,25 +64,25 @@ export default {
             },
     mounted() {
         
-        axios.get('http://localhost:8000/api/exercises', {
+        axios.get('http://localhost:8000/api/games', {
                 headers: {
                      "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                 }
             })
             .then((response) => {
-                this.exercises = response.data.exercises;
+                this.games = response.data.games;
             })  
         
     },
     methods:{
-        deactivateexercise(exercise_id,key){
-            axios.get(`/api/exercises/deactivate/${exercise_id}`,{
+        deactivategame(game_id,key){
+            axios.get(`/api/games/deactivate/${game_id}`,{
                 headers:{
                     "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                 }
             })
             .then((response) => {
-                this.$refs.status[key].innerHTML = response.data.exercise_status
+                this.$refs.status[key].innerHTML = response.data.game_status
                 this.$refs.deacButton[key].innerHTML = this.$refs.status[key].textContent == 'active' ?'Deactivate':'Activate'
                 
             });

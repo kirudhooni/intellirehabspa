@@ -8,7 +8,7 @@
         <div class="row">
             
             <div class="col-md-4">
-                <select size="20" class="form-control" name="inGroup" id="list1" multiple>
+                <select size="20" class="form-control" v-model="list1Selected" name="inGroup" id="list1" multiple>
                     <option v-for="item1 in list1" >{{ item1 }}</option>
                 </select>
             </div>
@@ -18,7 +18,7 @@
             </div>
             
             <div class="col-md-4">
-                <select size="20" class="form-control" name="notInGroup" id="list2" multiple>
+                <select size="20" class="form-control" v-model="list2Selected" name="notInGroup" id="list2" multiple>
                     <option v-for="item2 in list2" >{{ item2 }}</option>
                 </select>
             </div>
@@ -39,11 +39,14 @@
         ],
         mounted() {
             console.log('DualListBox mounted.')
+            this.$emit('notInGroup',this.list2);
+            this.$emit('inGroup',this.list1);
         },
 
         data() {
             return {
-                
+                list1Selected:[],
+                list2Selected:[],
                 newUsers: '',
                 // list1: [],
                 // list2: [],
@@ -53,15 +56,15 @@
         methods: {
             oneToRight() {
                  
-                var select = [];   
+                //var select = [];   
                 var i; 
-                $("#list1 :selected").each(function(){
-                    select.push($(this).val()); 
-                });
-                if (select != ""){
-                    for (i = 0; i < select.length; i++) {
-                    this.list2.push(select[i])
-                    var del = this.list1.indexOf(select[i])
+                // $("#list1 :selected").each(function(){
+                //     select.push($(this).val()); 
+                // });
+                if (this.list1Selected != ""){
+                    for (i = 0; i < this.list1Selected.length; i++) {
+                    this.list2.push(this.list1Selected[i])
+                    var del = this.list1.indexOf(this.list1Selected[i])
                     this.list1.splice(del,1)
                     }
                     
@@ -70,15 +73,15 @@
                 this.$emit('inGroup',this.list1);
             },
             oneToLeft() {
-                var select = [];   
+                // var select = [];   
                 var i; 
-                $("#list2 :selected").each(function(){
-                    select.push($(this).val()); 
-                });
-                if (select != ""){
-                    for (i = 0; i < select.length; i++) {
-                    this.list1.push(select[i])
-                    var del = this.list2.indexOf(select[i])
+                // $("#list2 :selected").each(function(){
+                //     select.push($(this).val()); 
+                // });
+                if (this.list2Selected != ""){
+                    for (i = 0; i < this.list2Selected.length; i++) {
+                    this.list1.push(this.list2Selected[i])
+                    var del = this.list2.indexOf(this.list2Selected[i])
                     this.list2.splice(del,1)
                     }
                     

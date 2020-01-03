@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exercise;
 use App\Joint;
+use App\Game;
 use Illuminate\Http\Request;
 
 class ExerciseController extends Controller
@@ -32,6 +33,8 @@ class ExerciseController extends Controller
         $validatedData = $request->validate([
             
             'name' => 'required',
+            'assignedJoints' => 'required',
+            'assignedGames' => 'required'
             
     ]);
     
@@ -39,9 +42,12 @@ class ExerciseController extends Controller
     
     $exercise= Exercise::create($request->only('name','description'));
     //$exercise = Exercise::find(1);
-    $joints_in= Joint::select('id')->whereIn('name', $request['masterlist1'])->pluck('id');
+    $joints_in= Joint::select('id')->whereIn('name', $request['assignedJoints'])->pluck('id');
+
+    $games_in= Game::select('id')->whereIn('name', $request['assignedGames'])->pluck('id');
 
     $exercise->joints()->sync($joints_in);
+    $exercise->games()->sync($games_in);
 
     return response()->json([
         "exercise" => true
@@ -95,16 +101,28 @@ class ExerciseController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
             
-        ]);
+            'name' => 'required',
+            'assignedJoints' => 'required',
+            'assignedGames' => 'required'
+            
+    ]);
+    
 
-        $exercise = Exercise::find($id);
-        $exercise->update($request->only('name','description'));
+    $exercise = Exercise::find($id);
+    $exercise->update($request->only('name','description'));
 
-        return response()->json([
-            "exercise" => $exercise
-        ], 200);
+    
+    $joints_in= Joint::select('id')->whereIn('name', $request['assignedJoints'])->pluck('id');
+
+    $games_in= Game::select('id')->whereIn('name', $request['assignedGames'])->pluck('id');
+
+    $exercise->joints()->sync($joints_in);
+    $exercise->games()->sync($games_in);
+
+    return response()->json([
+        "exercise" => true
+    ], 200);
     }
 
     /**
@@ -164,7 +182,7 @@ class ExerciseController extends Controller
 
     public function getJointsNotInExercise($id)
     {   
-        if($id = null){
+        if($id == null){
             $joints = Joint::whereDoesntHave('exercises')->get();
         }else{
             $joints = Joint::whereDoesntHave('exercises',function ($query) use($id){$query->where('id',$id);})->get();
@@ -172,17 +190,12 @@ class ExerciseController extends Controller
         
         return response()->json([
             "joints" => $joints
-        ], 200);
-
-        
-
-        
-        
+        ], 200);  
     }
 
     public function getJointsInExercise($id)
     {   
-        if($id = null){
+        if($id == null){
         $joints = [];
         }else{
         $joints = Joint::whereHas('exercises',function ($query) use($id){$query->where('id',$id);})->get();
@@ -191,9 +204,32 @@ class ExerciseController extends Controller
             "joints" => $joints
         ], 200);
        
+    }
 
-        // return response()->json([
-        //     "users" => $users
-        // ], 200);
+    //games
+    public function getGamesNotInExercise($id)
+    {   
+        if($id == null){
+            $games = Game::whereDoesntHave('exercises')->get();
+        }else{
+            $games = Game::whereDoesntHave('exercises',function ($query) use($id){$query->where('id',$id);})->get();
+        }
+        
+        return response()->json([
+            "games" => $games
+        ], 200);  
+    }
+
+    public function getGamesInExercise($id)
+    {   
+        if($id == null){
+        $games = [];
+        }else{
+        $games = Game::whereHas('exercises',function ($query) use($id){$query->where('id',$id);})->get();
+        }
+        return response()->json([
+            "games" => $games
+        ], 200);
+       
     }
 }

@@ -14,4 +14,8 @@ class Exercise extends Model
     {
         return $this->belongsToMany('App\Joint');
     }
+    public function games()
+    {
+        return $this->belongsToMany('App\Game');
+    }
 }

@@ -20,6 +20,11 @@ import ExerciseList from './views/exercises/exerciseList.vue';
 import ExerciseAdd from './views/exercises/add.vue';
 import ExerciseEdit from './views/exercises/edit.vue';
 
+import gamesMain from './views/games/gamesMain.vue';
+import GameList from './views/games/gameList.vue'; 
+import GameAdd from './views/games/add.vue';
+import GameEdit from './views/games/edit.vue';
+
 export const routes =[
     {
         path: '/',
@@ -101,9 +106,30 @@ export const routes =[
                 component: ExerciseAdd
             },
             {
-                path: 'edit/:id',
+                path: 'edit/:id?',
                 component: ExerciseEdit
             }
+        ]  
+    },
+    {
+        path: '/games',
+        component: gamesMain,
+        meta:{
+            requiresAuth: true
+        },
+        children: [
+            {
+                path: '/',
+                component: GameList
+            },
+            {
+                path: 'add',
+                component: GameAdd
+            },
+            // {
+            //     path: 'edit/:id',
+            //     component: GameEdit
+            // }
         ]  
     },
     {

@@ -47,7 +47,7 @@
             delete this.errors[field];
         }
     }
-
+    
     export default {
         name: 'add',
         computed: {

@@ -63,6 +63,17 @@ Route::group([
     Route::get('exercises/deactivate/{id}','ExerciseController@deactivate');
     Route::get('exercises/getJointsInExercise/{id?}','ExerciseController@getJointsInExercise');
     Route::get('exercises/getJointsNotInExercise/{id?}','ExerciseController@getJointsNotInExercise');
+    Route::get('exercises/getGamesInExercise/{id?}','ExerciseController@getGamesInExercise');
+    Route::get('exercises/getGamesNotInExercise/{id?}','ExerciseController@getGamesNotInExercise');
+
+    //games
+    Route::get('games','GameController@index');
+    Route::get('games/edit/{id}','GameController@edit');
+    Route::post('games/add','GameController@create');
+    Route::post('games/edit/update/{id}','GameController@update');
+    Route::get('games/downloadGames','GameController@downloadgames');
+    Route::get('games/deactivate/{id}','GameController@deactivate');
+    
 
     //personal
     Route::get('personal/edit/{id}','PersonalController@edit');

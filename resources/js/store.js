@@ -15,7 +15,9 @@ export default {
         users: [],
         groupAdded: false,
         groupUpdated: false,
-        groups: []
+        groups: [],
+        gameAdded: false,
+        gameUpdated: false,
 
 
     },
@@ -53,6 +55,12 @@ export default {
         },
         groupUpdated(state){
             return state.groupUpdated;
+        },
+        gameAdded(state){
+            return state.gameAdded;
+        },
+        gameUpdated(state){
+            return state.gameUpdated;
         },
     },
     mutations: {
@@ -109,6 +117,18 @@ export default {
         },
         updateGroupUpdatedFalse(state){
             state.groupUpdated = false;
+        },
+        updateGameAddedTrue(state){
+            state.gamepAdded = true;
+        },
+        updateGameAddedFalse(state){
+            state.gameAdded = false;
+        },
+        updateGameUpdatedTrue(state){
+            state.gameUpdated = true;
+        },
+        updateGameUpdatedFalse(state){
+            state.gameUpdated = false;
         },
     },
     actions: {

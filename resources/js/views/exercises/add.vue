@@ -17,7 +17,7 @@
 
     <dualListBox :list1 ="list1" :list2="list2" firstTitle="Assigned Joints" secondTitle="All Joints" @inGroup="updateMasterList" @notInGroup="updateMasterList2"></dualListBox>
 
-    <!-- <dualListBox firstTitle="Assigned Games" secondTitle="All Games" selectedGroup="sss" @inGroup="updateMasterList" @notInGroup="updateMasterList2"></dualListBox> -->
+    <dualListBox :list1 ="list1game" :list2="list2game" firstTitle="Assigned Games" secondTitle="All Games" selectedGroup="sss" @inGroup="updateMasterListGame" @notInGroup="updateMasterList2Game"></dualListBox>
 
     <div class="row  py-4 col-md-12">
                 <button @click="submitForm" class="btn btn-success col-md-4">Sumbit</button>
@@ -66,13 +66,17 @@
                 form: {
                     name :'',
                     description :'',
-                    masterlist1 :'',
-                    masterlist2 : '',
+                    assignedJoints :'',
+                    unassignedJoints : '',
+                    assignedGames:'',
+                    unassignedGames:'',
                     showSuccess: false
                     
                 },
                 list1: [],
                 list2: [],
+                list1game: [],
+                list2game: [],
 
 
                 errors: new Errors()
@@ -84,6 +88,8 @@
         created(){
                 this.list1 = []
                 this.list2 =[]
+                this.list1game = []
+                this.list2game =[]
                 //axios.get(`/api/users/getUsersInGroup/${group}`,{
                 axios.get(`/api/exercises/getJointsInExercise/${this.$route.params.id}`,{
                     headers: {
@@ -109,6 +115,31 @@
                   
                   }
               });
+
+
+              axios.get(`/api/exercises/getGamesInExercise/${this.$route.params.id}`,{
+                    headers: {
+                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                    }
+
+                }).then((response) => {
+                    
+                  for (var i = 0; i < response.data.games.length; i++) {  
+                  this.list1game.push(response.data.games[i].name);
+                  
+                  }
+            });
+                axios.get(`/api/exercises/getGamesNotInExercise/${this.$route.params.id}`,{
+                    headers: {
+                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                         }
+                }).then((response) => {  
+                    
+                  for (var i = 0; i < response.data.games.length; i++) {   
+                  this.list2game.push(response.data.games[i].name);
+                  
+                  }
+              });
         },
         methods:{
                 
@@ -123,16 +154,24 @@
                 })
                 .then((response)=> {
                     this.showSuccess = true;
+                    this.$router.push({path: '/exercises'});
                 })
                 .catch((error) => this.errors.record(error.response.data.errors));
                 
             },
             updateMasterList(value){
-                this.form.masterlist1 = value;
+                this.form.assignedJoints = value;
             },
             updateMasterList2(value){
-                this.form.masterlist2 = value;
+                this.form.unassignedJoints = value;
             },
+            updateMasterListGame(value){
+                this.form.assignedGames = value;
+                
+            },
+            updateMasterList2Game(value){
+                this.form.unassignedGames = value;
+            }
         }
 
     }
