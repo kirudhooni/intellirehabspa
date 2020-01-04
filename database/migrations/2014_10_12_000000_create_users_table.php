@@ -20,9 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->text('note')->nullable();
             $table->integer('phone');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->enum('level',['therapist', 'doctor', 'admin']);
+            $table->string('email');
+            $table->integer('doctor_id');
+            $table->integer('therapist_id');
             $table->enum('status',['active', 'inactive'])->default('active');
             $table->timestamps();
         });

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Game;
 use App\Apk;
+
+
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -32,16 +34,27 @@ class GameController extends Controller
         $validatedData = $request->validate([
             
             'name' => 'required',
-            'current_version' => 'required'
-            
-    ]);
-    
+            'current_version' => 'required',
+            'file' => 'required',
+            ]);
+        
+        $path = hash( 'sha256', time());
 
-    
-    $game= Game::create($request->only('name','description','current_version'));
+        $path = $request->file('file')->storeAs(
+            'apks/'.$path.'/',$request->file('file')->getClientOriginalName(), 'uploads'
+        );
+        $apk = new Apk;
+        $apk->filename = $request->file('file')->getClientOriginalName();
+        $apk->path = 'apks/'.$path.'/';
+        $apk->size = $request->file('file')->getSize();
+        $apk->version = $request->input('current_version');
+        $apk->save();
 
+       $game= Game::create($request->only('name','description','current_version'));
+
+       $apk->games()->sync($game->id);
     return response()->json([
-        "game" => $game
+        "game_created" => true
     ], 200);
     }
 
@@ -146,25 +159,33 @@ class GameController extends Controller
         }
     }
     public function uploadFile(Request $request) {
-        $file = Input::file('file');
-        $filename = $file->getClientOriginalName();
-
+        $validatedData = $request->validate([
+            
+            'game' => 'required',
+            'version' => 'required',
+            'file' => 'required',
+            ]);
+        
         $path = hash( 'sha256', time());
 
-        if(Storage::disk('uploads')->put($path.'/'.$filename,  File::get($file))) {
-            $input['filename'] = $filename;
-            $input['path'] = $path;
-            $input['size'] = $file->getClientSize();
-            $file = Apk::create($input);
+        $path = $request->file('file')->storeAs(
+            'apks/'.$path.'/',$request->file('file')->getClientOriginalName(), 'uploads'
+        );
+        $apk = new Apk;
+        $apk->filename = $request->file('file')->getClientOriginalName();
+        $apk->path = 'apks/'.$path.'/';
+        $apk->size = $request->file('file')->getSize();
+        $apk->version = $request->input('version');
+        $apk->save();
 
-            return response()->json([
-                'success' => true,
-                'id' => $file->id
-            ], 200);
-        }
-        return response()->json([
-            'success' => false
-        ], 500);
+        $game_id = $request->input('game');
+        
+        $apk->games()->sync($game_id);
+      
+
+    return response()->json([
+        "game_created" => true
+    ], 200);
     }
 
 }

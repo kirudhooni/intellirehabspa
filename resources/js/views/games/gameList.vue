@@ -64,7 +64,7 @@ export default {
             },
     mounted() {
         
-        axios.get('http://localhost:8000/api/games', {
+        axios.get('/api/games', {
                 headers: {
                      "Authorization": `Bearer ${this.$store.state.currentUser.token}`
                 }

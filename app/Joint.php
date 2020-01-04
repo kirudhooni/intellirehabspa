@@ -11,4 +11,9 @@ class Joint extends Model
     {
         return $this->belongsToMany('App\Exercise');
     }
+
+    public function roms()
+    {
+        return $this->belongsToMany('App\Rom');
+    }
 }

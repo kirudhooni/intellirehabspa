@@ -73,12 +73,24 @@ Route::group([
     Route::post('games/edit/update/{id}','GameController@update');
     Route::get('games/downloadGames','GameController@downloadgames');
     Route::get('games/deactivate/{id}','GameController@deactivate');
+    Route::post('games/uploadAPK', 'GameController@uploadFile');
     
-
+    //patients
+    Route::get('patients','PatientController@index');
+    Route::get('patients/edit/{id}','PatientController@edit');
+    Route::post('patients/add','PatientController@create');
+    Route::post('patients/edit/update/{id}','PatientController@update');
+    Route::get('patients/downloadPatients','PatientController@downloadpatients');
+    Route::get('patients/deactivate/{id}','PatientController@deactivate');
+    
     //personal
     Route::get('personal/edit/{id}','PersonalController@edit');
     Route::post('personal/edit/update/{id}','PersonalController@update');
     Route::post('personal/edit/changepassword/{id}', 'PersonalController@changePassword');
+
+    //joints
+    Route::get('joints/getRoms','JointController@getJointAndRoms');
+    
 
 
 });

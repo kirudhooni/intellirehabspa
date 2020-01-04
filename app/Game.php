@@ -14,4 +14,9 @@ class Game extends Model
     {
         return $this->belongsToMany('App\Exercise');
     }
+
+    public function apks()
+    {
+        return $this->belongsToMany('App\Apk');
+    }
 }

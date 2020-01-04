@@ -82,50 +82,55 @@
         },
         methods:{
                 submitForm(){
-                axios.post('/api/games/add', this.$data.form,{
-                    headers: {
-                        "Authorization": `Bearer ${this.$store.state.currentUser.token}`
-                    }
-                })
-                .then((response) => {
-                    if(submitFiles()){
-                    this.$store.commit("updateGameAddedTrue");
-                    this.$router.push({path: '/games'});
-                    console.log(response);
-                    }
-                    else{
-                        alert('Failed to upload APK file to server!')
-                    }
-                })
-                .catch((error) => this.errors.record(error.response.data.errors));
-                
-            }
-        },
-        submitFiles() {
-                for( let i = 0; i < this.files.length; i++ ){
-                    if(this.files[i].id) {
-                        continue;
-                    }
                     let formData = new FormData();
-                    formData.append('file', this.files[i]);
-
-                    axios.post('/api/games/uploadAPK',
-                        formData,
-                        {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                                "Authorization": `Bearer ${this.$store.state.currentUser.token}`
-                            }
+                    formData.append('file', this.files[0]);    
+                    formData.append('name', this.form.name);
+                    formData.append('description', this.form.description);
+                    formData.append('current_version', this.form.current_version);
+                    axios.post('/api/games/add', formData,{
+                        headers: {
+                            "Authorization": `Bearer ${this.$store.state.currentUser.token}`,
+                            'Content-Type': 'multipart/form-data',
                         }
-                    ).then((response)=>{
-                        true
                     })
-                    .catch((error) => false);
-                }
+                    .then((response) => {
+                        
+                        this.$store.commit("updateGameAddedTrue");
+                        this.$router.push({path: '/games'});
+                        console.log(response);
+                        
+                    })
+                    .catch((error) => this.errors.record(error.response.data.errors));
+                
             },
             updateFile(value){
                 this.files = value;
             }
+        },
+        // submitFiles() {
+        //         for( let i = 0; i < this.files.length; i++ ){
+        //             if(this.files[i].id) {
+        //                 continue;
+        //             }
+        //             let formData = new FormData();
+        //             formData.append('file', this.files[i]);
+                    
+
+        //             axios.post('/api/games/uploadAPK',
+        //                 formData,
+        //                 {
+        //                     headers: {
+        //                         'Content-Type': 'multipart/form-data',
+        //                         "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+        //                     }
+        //                 }
+        //             ).then((response)=>{
+        //                 true
+        //             })
+        //             .catch((error) => false);
+        //         }
+        //     },
+            
 
 
     }

@@ -24,6 +24,17 @@ import gamesMain from './views/games/gamesMain.vue';
 import GameList from './views/games/gameList.vue'; 
 import GameAdd from './views/games/add.vue';
 import GameEdit from './views/games/edit.vue';
+import GameApk from './views/games/uploadApk.vue';
+
+import patientsMain from './views/patients/patientsMain.vue';
+import PatientList from './views/patients/patientList.vue'; 
+import PatientAdd from './views/patients/add.vue';
+import PatientEdit from './views/patients/edit.vue';
+
+import targetsMain from './views/targets/targetsMain.vue';
+//import TargetList from './views/targets/patientList.vue'; 
+import TargetAdd from './views/targets/add.vue';
+//import TargetEdit from './views/targets/edit.vue';
 
 export const routes =[
     {
@@ -112,6 +123,28 @@ export const routes =[
         ]  
     },
     {
+        path: '/targets',
+        component: targetsMain,
+        meta:{
+            requiresAuth: true
+        },
+        children: [
+            // {
+            //     path: '/',
+            //     component: TargetList
+            // },
+            {
+                path: 'add',
+                component: TargetAdd
+            },
+            // {
+            //     path: 'edit/:id',
+            //     component: TargetEdit
+            // },
+            
+        ]  
+    },
+    {
         path: '/games',
         component: gamesMain,
         meta:{
@@ -126,10 +159,36 @@ export const routes =[
                 path: 'add',
                 component: GameAdd
             },
-            // {
-            //     path: 'edit/:id',
-            //     component: GameEdit
-            // }
+            {
+                path: 'edit/:id',
+                component: GameEdit
+            },
+            {
+                path: 'uploadApk',
+                component: GameApk
+            }
+        ]  
+    },
+    {
+        path: '/patients',
+        component: patientsMain,
+        meta:{
+            requiresAuth: true
+        },
+        children: [
+            {
+                path: '/',
+                component: PatientList
+            },
+            {
+                path: 'add',
+                component: PatientAdd
+            },
+            {
+                path: 'edit/:id',
+                component: PatientEdit
+            },
+            
         ]  
     },
     {

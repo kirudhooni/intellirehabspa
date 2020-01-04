@@ -30,11 +30,20 @@
             <button class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" @click="downloadExercises">Download Exercises</button>
         </div>
 
+    <!-- target -->
+        <div class="form-row  my-4" style="background-color: #BCC2C7; border-radius:10px;">
+            <label class="col-md-2 col-form-label text-center" ><h2 class="text-center">Target</h2></label>
+            <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/targets/add">Add</router-link>
+            <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/targets">Edit/View</router-link>
+            <button class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" @click="downloadTargets">Download Targets</button>
+        </div>
+
     <!-- games -->
         <div class="form-row  my-4" style="background-color: #BCC2C7; border-radius:10px;">
             <label class="col-md-2 col-form-label text-center" ><h2 class="text-center">Game</h2></label>
             <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/games/add">Add</router-link>
             <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/games">Edit/View</router-link>
+            <router-link class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" role="button" to="/games/uploadApk">Upload APK</router-link>
             <button class="btn btn-primary col-md-2 mr-5 my-2 text-center" style="border-radius:30px" @click="downloadGames">Download Games</button>
         </div>
         
