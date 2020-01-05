@@ -16,4 +16,8 @@ class Joint extends Model
     {
         return $this->belongsToMany('App\Rom');
     }
+    public function targets()
+    {
+        return $this->belongsToMany('App\Target')->withPivot('rom_id','rom_value');
+    }
 }

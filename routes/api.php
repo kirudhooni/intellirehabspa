@@ -90,7 +90,14 @@ Route::group([
 
     //joints
     Route::get('joints/getRoms','JointController@getJointAndRoms');
-    
+    Route::get('joints/getExistingRoms','JointController@getExistingJointAndRoms');
+
+    //targets
+    Route::get('targets','TargetController@index');
+    Route::post('targets/add','TargetController@store');
+    Route::post('targets/edit/update/{id}','TargetController@update');
+    Route::get('targets/downloadTargets','TargetController@downloadtargets');
+    Route::get('targets/deactivate/{id}','TargetController@deactivate');
 
 
 });

@@ -8,6 +8,8 @@ class Rom extends Model
 {
     public function joints()
     {
-        return $this->belongsToMany('App\Joint');
+        return $this->belongsToMany('App\Joint');;
     }
+    
+    
 }

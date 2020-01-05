@@ -127,7 +127,23 @@
                     document.body.appendChild(fileLink);
                     fileLink.click();
              })
-         }     
+         },
+         downloadTargets(){
+             axios.get('/api/targets/downloadTargets', {
+                 headers: {
+                     "Authorization": `Bearer ${this.$store.state.currentUser.token}`
+                 },
+                 responseType: 'blob'
+             })
+             .then((response) => {
+                 var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                 var fileLink = document.createElement('a');
+                 fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'TargetsList.csv');
+                    document.body.appendChild(fileLink);
+                    fileLink.click();
+             })
+         }        
         },
                 
         

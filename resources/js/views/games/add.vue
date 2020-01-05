@@ -90,7 +90,7 @@
                     axios.post('/api/games/add', formData,{
                         headers: {
                             "Authorization": `Bearer ${this.$store.state.currentUser.token}`,
-                            'Content-Type': 'multipart/form-data',
+                            
                         }
                     })
                     .then((response) => {

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h2 class="display-4 form-label-mb-5">Add Game</h2>
+    <h2 class="display-4 form-label-mb-5">Add Target</h2>
     <form @submit.prevent="submitForm" @keydown="errors.clear($event.target.name)">
      <div class="row border py-4">
         <label class="col-form-label col-md-2" for="name">Name</label>
@@ -24,17 +24,17 @@
                 <th width= "55%" >ROM Value</th>
             </tr>
             
-            <template v-for="joint in form.jointData">  
+            <template v-for="(joint,key1) in form.jointData" >  
             <tr>
                 <td ><strong>{{joint.description}}</strong></td>
                 <td></td>
                 <td></td>
             </tr>
 
-            <tr v-for="rom in joint.roms">
+            <tr v-for="(rom,key2) in joint.roms">
                 <td></td>
                 <td  >{{rom.name}}</td>
-                <td><input class="form-control col-md-12" type="text"></td>
+                <td><input class="form-control col-md-12" type="text" v-model="form.jointData[key1].roms[key2].value" required></td>
             </tr>
            </template>
         </table>
@@ -108,11 +108,11 @@
         methods:{
                 submitForm(){
                     let formData = new FormData();
-                    formData.append('file', this.files[0]);    
+                      
                     formData.append('name', this.form.name);
                     formData.append('description', this.form.description);
-                    formData.append('current_version', this.form.current_version);
-                    axios.post('/api/games/add', formData,{
+                    formData.append('rom_value', JSON.stringify(this.form.jointData));
+                    axios.post('/api/targets/add', formData,{
                         headers: {
                             "Authorization": `Bearer ${this.$store.state.currentUser.token}`,
                             'Content-Type': 'multipart/form-data',
@@ -120,8 +120,8 @@
                     })
                     .then((response) => {
                         
-                        this.$store.commit("updateGameAddedTrue");
-                        this.$router.push({path: '/games'});
+                        
+                        this.$router.push({path: '/targets'});
                         console.log(response);
                         
                     })

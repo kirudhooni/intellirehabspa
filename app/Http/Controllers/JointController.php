@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Joint;
+use App\Target;
 use Illuminate\Http\Request;
 
 class JointController extends Controller
@@ -21,4 +22,15 @@ class JointController extends Controller
             "joints" => $joints 
         ], 200);
     }
+
+    public function getExistingJointAndRoms(){
+
+        $joints = Joint::with('targets','roms')->get();
+
+        
+        return response()->json([
+            "joints" => $joints ,
+            
+        ], 200);
+     }
 }

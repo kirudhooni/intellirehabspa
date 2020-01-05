@@ -32,9 +32,9 @@ import PatientAdd from './views/patients/add.vue';
 import PatientEdit from './views/patients/edit.vue';
 
 import targetsMain from './views/targets/targetsMain.vue';
-//import TargetList from './views/targets/patientList.vue'; 
+import TargetList from './views/targets/targetList.vue'; 
 import TargetAdd from './views/targets/add.vue';
-//import TargetEdit from './views/targets/edit.vue';
+import TargetEdit from './views/targets/edit.vue';
 
 export const routes =[
     {
@@ -129,18 +129,18 @@ export const routes =[
             requiresAuth: true
         },
         children: [
-            // {
-            //     path: '/',
-            //     component: TargetList
-            // },
+            {
+                path: '/',
+                component: TargetList
+            },
             {
                 path: 'add',
                 component: TargetAdd
             },
-            // {
-            //     path: 'edit/:id',
-            //     component: TargetEdit
-            // },
+            {
+                path: 'edit/:id',
+                component: TargetEdit
+            },
             
         ]  
     },
