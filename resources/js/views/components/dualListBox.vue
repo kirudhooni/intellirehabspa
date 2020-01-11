@@ -1,13 +1,14 @@
 <template>
-    <div>
+    <div class="">
+        <div>   
         <div class="row" style="padding-top:30px; padding-bottom:10px;">
-            <h3 class="col-md-4 text-center" for="inGroup">{{firstTitle}}</h3>
+            <h3 class="col-md-5 text-center" for="inGroup">{{firstTitle}}</h3>
             <div class="col-md-2"></div>
-            <h3 class="col-md-4 text-center" for="notInGroup">{{secondTitle}}</h3>
+            <h3 class="col-md-5 text-center" for="notInGroup">{{secondTitle}}</h3>
         </div>
         <div class="row">
             
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <select size="20" class="form-control" v-model="list1Selected" name="inGroup" id="list1" multiple>
                     <option v-for="item1 in list1" >{{ item1 }}</option>
                 </select>
@@ -17,11 +18,12 @@
                 <button class="btn btn-success btn-block mb-2" @click="oneToLeft">&laquo;</button>
             </div>
             
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <select size="20" class="form-control" v-model="list2Selected" name="notInGroup" id="list2" multiple>
                     <option v-for="item2 in list2" >{{ item2 }}</option>
                 </select>
             </div>
+        </div>
         </div>
     </div>
 </template>

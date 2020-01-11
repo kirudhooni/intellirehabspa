@@ -91,6 +91,8 @@ Route::group([
     //joints
     Route::get('joints/getRoms','JointController@getJointAndRoms');
     Route::get('joints/getExistingRoms','JointController@getExistingJointAndRoms');
+    Route::post('joints/getExerciseRoms','JointController@getExerciseRoms');
+    Route::post('joints/getExerciseLimbs','JointController@getExerciseLimbs');
 
     //targets
     Route::get('targets','TargetController@index');

@@ -13,6 +13,15 @@ import MainApp from './views/MainApp.vue'
 import Vue from 'vue';
 import axios from 'axios';
 import {initialize} from './helpers/general';
+//wizrd
+import VueFormWizard from 'vue-form-wizard'
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+Vue.use(VueFormWizard);
+
 Vue.use(VueRouter);
 Vue.use(Vuex);
 

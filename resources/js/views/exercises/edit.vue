@@ -153,7 +153,7 @@
         methods:{
                 
             submitForm(){
-                axios.post(`/api/exercises/add`,
+                axios.post(`/api/exercises/edit/update/${this.$route.params.id}`,
                       
                         this.form
                     ,{

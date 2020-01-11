@@ -33,4 +33,26 @@ class JointController extends Controller
             
         ], 200);
      }
+     
+     public function getExerciseRoms(Request $request){
+
+        $exerciseNameList = json_decode($request->input('exerciseNames'),true);
+        
+        $joints = Joint::whereHas('exercises',function($query)use($exerciseNameList){$query->whereIn('name',$exerciseNameList);})->with('roms')->get();
+        
+         return response()->json([
+             "joints" => $joints 
+         ], 200);
+     }
+
+     public function getExerciseLimbs(Request $request){
+
+        $exerciseNameList = json_decode($request->input('exerciseNames'),true);
+        
+        $limbs = Limb::whereHas('exercises',function($query)use($exerciseNameList){$query->whereIn('name',$exerciseNameList);})->with('limbs')->get();
+        
+         return response()->json([
+             "limbs" => $limbs 
+         ], 200);
+     }
 }

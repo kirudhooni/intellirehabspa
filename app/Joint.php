@@ -20,4 +20,9 @@ class Joint extends Model
     {
         return $this->belongsToMany('App\Target')->withPivot('rom_id','rom_value');
     }
+
+    public function limbs()
+    {
+        return $this->belongsToMany('App\Limb');
+    }
 }

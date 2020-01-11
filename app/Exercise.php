@@ -18,4 +18,8 @@ class Exercise extends Model
     {
         return $this->belongsToMany('App\Game');
     }
+    public function limbs()
+    {
+        return $this->belongsToMany('App\Limb');
+    }
 }
